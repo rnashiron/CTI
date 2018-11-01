@@ -13,29 +13,31 @@ network architecture](https://deepmind.com/blog/wavenet-generative-model-raw-aud
 WaveNetneural network architectureとは、生の音の波形を生成し、文章から音声への変換や音声の作成に役立つつよいやつです。（詳しくは論文を読んで。）
 </p>
 <p>
-Networkは、それまでの音声サンプルとモデルに関するパラメータから、次の音波サンプルを条件付確率の形（多分）で生成します。
+Networkは、それまでの音声サンプルとモデルに関するパラメータから、次の音波サンプルを条件付確率の形で生成します。（多分、予測分布をつくる、くらいの意味）
 </p>
 <p>
 音声の前処理が済んだら、インプットされた波形は整数の範囲で数値化されます。
 その整数化された（音の？）振幅は、それからone-hot形式（1つだけHigh(1)であり、他はLow(0)であるようなビット列）でエンコードされ、<code>(num_samples, num_channels)</code>で表されるtensorを生成します。
 </p>
 <p>
-A convolutional layer that only accesses the current and previous inputs then reduces the channel dimension.
+現時点もしくは以前のインプットにのみアクセスする畳み込み層（A convolutional layer）は チャンネルの次元を減らします。
 </p>
 <p>
-The core of the network is constructed as a stack of <em>causal dilated layers</em>, each of which is a
-dilated convolution (convolution with holes), which only accesses the current and past audio samples.
+Networkのコアは、大量の<em>causal dilated layers</em>で構成され、その一つ一つがdilated convolution (convolution with holes)であり、そして現時点と以前の音声サンプルにのみアクセスする。
 </p>
 <p>
-The outputs of all layers are combined and extended back to the original number
-of channels by a series of dense postprocessing layers, followed by a softmax
-function to transform the outputs into a categorical distribution.
+ すべての層でのアウトプットは結合され、元のチャンネル数に戻ります。その際、アウトプットをcategorical distributionに変換するようなソフトマックス関数が用いられます。（多分）
 </p>
 <p>
 The loss function is the cross-entropy between the output for each timestep and the input at the next timestep.
+損失関数は、各期のアウトプットとその次期のインプット間の交差エントロピーです。
 </p>
 <p>
 In this repository, the network implementation can be found in <a href="./wavenet/model.py">model.py</a>.
+…らしいけど、model.pyがなーーーーーい（404）
+</p>
+<p>
+  追記:この辺の関数については https://qiita.com/shunchan0677/items/d30e5206677f2068a468 あたりに書いてあるかもしれんと思った
 </p>
 </td>
 <td width="300">
@@ -44,47 +46,53 @@ In this repository, the network implementation can be found in <a href="./wavene
 </tr>
 </table>
 
-## Requirements
+## 必要なやつ
 
-TensorFlow needs to be installed before running the training script.
-Code is tested on TensorFlow version 1.0.1 for Python 2.7 and Python 3.5.
+training scriptを回す前に、まずTensorflowをインストールしておいてください。
+コードはTensorFlow ver. 1.0.1(Python 2.7, 3.5)でテストしています。
 
-In addition, [librosa](https://github.com/librosa/librosa) must be installed for reading and writing audio.
+加えて、音声データの読み書きを可能にするために [librosa](https://github.com/librosa/librosa) をインストールする必要があります。
 
-To install the required python packages, run
+必要なパッケージをインストールするために、
 ```bash
 pip install -r requirements.txt
 ```
-
-For GPU support, use
+を実行してください。
+GPUサポートが必要であれば、
 ```bash
 pip install -r requirements_gpu.txt
 ```
+を使ってください。
 
-## Training the network
+## ネットワークの学習(Training the network)
 
-You can use any corpus containing `.wav` files.
-We've mainly used the [VCTK corpus](http://homepages.inf.ed.ac.uk/jyamagis/page3/page58/page58.html) (around 10.4GB, [Alternative host](http://www.udialogue.org/download/cstr-vctk-corpus.html)) so far.
+ `.wav` 形式ファイルのコーパスを好きに使うことができます。
+開発チームは主に [VCTK corpus](http://homepages.inf.ed.ac.uk/jyamagis/page3/page58/page58.html) (around 10.4GB, [Alternative host](http://www.udialogue.org/download/cstr-vctk-corpus.html)) を使ってきました。
 
-In order to train the network, execute
+ネットワークを学習するために、
 ```bash
 python train.py --data_dir=corpus
 ```
-to train the network, where `corpus` is a directory containing `.wav` files.
-The script will recursively collect all `.wav` files in the directory.
+を実行してください。`corpus` というのは、`.wav` ファイルの入ったデイレクトリです。
+このスクリプトは、ディレクトリ内のすべての`.wav`ファイルを再帰的に読み取ってくれるでしょう。
 
-You can see documentation on each of the training settings by running
+また、
 ```bash
 python train.py --help
 ```
+と実行することで、学習(training)の設定についての文書を見ることができます。
 
-You can find the configuration of the model parameters in [`wavenet_params.json`](./wavenet_params.json).
-These need to stay the same between training and generation.
+[`wavenet_params.json`](./wavenet_params.json)内の、モデルのパラメータの構造を見ることができます。
+これら（のパラメータ）は、トレーニングと生成（のモデル）で同じである必要があります。
 
 ### Global Conditioning
 Global conditioning refers to modifying the model such that the id of a set of mutually-exclusive categories is specified during training and generation of .wav file.
+Global conditioningというのは、.wav file.の学習と生成とで互いに矛盾するようなもの（ID）を修正することです。
+
+VCTK(様々な英語アクセントをもつ音声コーパスのこと)の場合、この‘‘ID"というのはスピーカーの整数IDをさし、100以上あります。（発話者は109人いるらしい）
 In the case of the VCTK, this id is the integer id of the speaker, of which there are over a hundred.
-This allows (indeed requires) that a speaker id be specified at time of generation to select which of the speakers it should mimic. For more details see the paper or source code.
+音声を生成するときは、どの話者を模倣するのか、IDを指定することができます（実際は指定しなきゃいけない）。
+詳細は論文かソースコードを読んでください。
 
 ### Training with Global Conditioning
 The instructions above for training refer to training without global conditioning. To train with global conditioning, specify command-line arguments as follows:
