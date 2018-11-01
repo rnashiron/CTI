@@ -95,17 +95,17 @@ In the case of the VCTK, this id is the integer id of the speaker, of which ther
 詳細は論文かソースコードを読んでください。
 
 ### Training with Global Conditioning
-The instructions above for training refer to training without global conditioning. To train with global conditioning, specify command-line arguments as follows:
+学習に関する上記の説明は、global conditioningがない場合でのものです。global conditioningを用いて学習をする場合は、以下のようにコマンドライン引数を定めてください。
 ```
 python train.py --data_dir=corpus --gc_channels=32
 ```
-The --gc_channels argument does two things:
-* It tells the train.py script that
-it should build a model that includes global conditioning.
-* It specifies the
-size of the embedding vector that is looked up based on the id of the speaker.
+--gc_channels 引数は、以下の2つのことをやってくれます。
+・global conditioningを含んだモデルにtrain.py scriptを渡す
+・話者のID上の（話者についての、くらいの意味？）埋め込みベクトル(embedding vector)のサイズを特定化する
 
-The global conditioning logic in train.py and audio_reader.py is "hard-wired" to the VCTK corpus at the moment in that it expects to be able to determine the speaker id from the pattern of file naming used in VCTK, but can be easily be modified.
+train.pyとaudio_reader.py内のglobal conditioningのロジックは、このVCTKコーパスと強く結びついており、VCYK内で使われるファイル名のパターンからスピーカーIDが決定できるものと期待されます。しかし、変更は簡単に行われます。
+The  logic in  is "hard-wired" to the VCTK corpus at the moment in that it expects to be able to determine the speaker id 
+from the pattern of file naming used in VCTK, but can be easily be modified.
 
 ## Generating audio
 
@@ -179,7 +179,6 @@ Currently there is no local conditioning on extra information which would allow
 context stacks or controlling what speech is generated.
 
 
-## Related projects
-
-- [tex-wavenet](https://github.com/Zeta36/tensorflow-tex-wavenet), a WaveNet for text generation.
-- [image-wavenet](https://github.com/Zeta36/tensorflow-image-wavenet), a WaveNet for image generation.
+## 関連するプロジェクト
+- [tex-wavenet](https://github.com/Zeta36/tensorflow-tex-wavenet), a WaveNet を用いた文章生成
+- [image-wavenet](https://github.com/Zeta36/tensorflow-image-wavenet), a WaveNet を用いた画像生成
