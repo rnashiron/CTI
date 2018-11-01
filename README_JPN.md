@@ -33,7 +33,8 @@ The loss function is the cross-entropy between the output for each timestep and 
 損失関数は、各期のアウトプットとその次期のインプット間の交差エントロピーです。
 </p>
 <p>
-In this repository, the network implementation can be found in <a href="./wavenet/model.py">model.py</a>.
+このリポジトリでは、 ネットワークの実装は<a href="./wavenet/model.py">model.py</a>で書かれています。
+(model.pyはwavenetフォルダ内にある)
 </p>
 <p>
   追記:この辺の関数については https://qiita.com/shunchan0677/items/d30e5206677f2068a468 あたりに書いてあるかもしれんと思った
@@ -94,7 +95,7 @@ In the case of the VCTK, this id is the integer id of the speaker, of which ther
 詳細は論文かソースコードを読んでください。
 
 ### Training with Global Conditioning
-学習に関する上記の説明は、global conditioningがない場合でのものです。global conditioningを用いて学習をする場合は、以下のようにコマンドライン引数を定めてください。
+学習に関する上記の説明(Training the network)は、global conditioningを使用しない場合のものです。global conditioningを用いて学習をする場合は、以下のようにコマンドライン引数を定めてください。
 ```
 python train.py --data_dir=corpus --gc_channels=32
 ```
@@ -142,31 +143,25 @@ python generate.py --samples 16000 logdir/train/2017-02-13T16-45-34/model.ckpt-8
 
 
 ### Global Conditioningを使用する場合
-Generate from a model incorporating global conditioning as follows:
+global conditioningを組み込んだモデルで音声を生成するときは、
 ```
 python generate.py --samples 16000  --wav_out_path speaker311.wav --gc_channels=32 --gc_cardinality=377 --gc_id=311 logdir/train/2017-02-13T16-45-34/model.ckpt-80000
 ```
-Where:
+としてください。
+`--gc_channels=32` では、埋め込みベクトル(the embedding vector)のサイズが32であると定めており、これは学習する際に指定したサイズと一致させてください。
 
-`--gc_channels=32` specifies 32 is the size of the embedding vector, and
-must match what was specified when training.
+`--gc_cardinality=377` では、VCTKコーパスでの話者のIDの最大数が376であることを要求しています。もしほかのコーパスを使用する場合、この数字は、学習を行う際に自動的に決定される数字（train.pyスプリプトに記されている）と一致しなければなりません。
 
-`--gc_cardinality=377` is required
-as 376 is the largest id of a speaker in the VCTK corpus. If some other corpus
-is used, then this number should match what is automatically determined and
-printed out by the train.py script at training time.
+`--gc_id=311` は話者のIDを特定し、サンプルが生成されます。
 
-`--gc_id=311` specifies the id of speaker, speaker 311, for which a sample is
-to be generated.
+## 動作テスト(Running tests)
 
-## Running tests
-
-Install the test requirements
+test requirementsをインストールしてください。
 ```
 pip install -r requirements_test.txt
 ```
 
-Run the test suite
+test suiteをインストールしてください。
 ```
 ./ci/test.sh
 ```
