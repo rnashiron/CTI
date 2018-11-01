@@ -34,7 +34,6 @@ The loss function is the cross-entropy between the output for each timestep and 
 </p>
 <p>
 In this repository, the network implementation can be found in <a href="./wavenet/model.py">model.py</a>.
-…らしいけど、model.pyがなーーーーーい（404）
 </p>
 <p>
   追記:この辺の関数については https://qiita.com/shunchan0677/items/d30e5206677f2068a468 あたりに書いてあるかもしれんと思った
@@ -86,8 +85,8 @@ python train.py --help
 これら（のパラメータ）は、トレーニングと生成（のモデル）で同じである必要があります。
 
 ### Global Conditioning
-Global conditioning refers to modifying the model such that the id of a set of mutually-exclusive categories is specified during training and generation of .wav file.
-Global conditioningというのは、.wav file.の学習と生成とで互いに矛盾するようなもの（ID）を修正することです。
+
+Global conditioningというのは、.wavファイルの学習と生成とで互いに矛盾するようなもの（ID）を修正することです。
 
 VCTK(様々な英語アクセントをもつ音声コーパスのこと)の場合、この‘‘ID"というのはスピーカーの整数IDをさし、100以上あります。（発話者は109人いるらしい）
 In the case of the VCTK, this id is the integer id of the speaker, of which there are over a hundred.
@@ -142,7 +141,7 @@ python generate.py --samples 16000 logdir/train/2017-02-13T16-45-34/model.ckpt-8
 を実行してください。
 
 
-### Generating with Global Conditioning
+### Global Conditioningを使用する場合
 Generate from a model incorporating global conditioning as follows:
 ```
 python generate.py --samples 16000  --wav_out_path speaker311.wav --gc_channels=32 --gc_cardinality=377 --gc_id=311 logdir/train/2017-02-13T16-45-34/model.ckpt-80000
