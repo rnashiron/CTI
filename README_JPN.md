@@ -1,26 +1,23 @@
-# A TensorFlow implementation of DeepMind's WaveNet paper
+# TensorflowによるDeepMind's WaveNet論文の実装
 
 [![Build Status](https://travis-ci.org/ibab/tensorflow-wavenet.svg?branch=master)](https://travis-ci.org/ibab/tensorflow-wavenet)
 
-This is a TensorFlow implementation of the [WaveNet generative neural
-network architecture](https://deepmind.com/blog/wavenet-generative-model-raw-audio/) for audio generation.
+これはthe [WaveNet generative neural
+network architecture](https://deepmind.com/blog/wavenet-generative-model-raw-audio/)という論文を基にした、音声を実際に生成するためのTensorflowによる実装です。
+
 
 <table style="border-collapse: collapse">
 <tr>
 <td>
 <p>
-The WaveNet neural network architecture directly generates a raw audio waveform,
-showing excellent results in text-to-speech and general audio generation (see the
-DeepMind blog post and paper for details).
+WaveNetneural network architectureとは、生の音の波形を生成し、文章から音声への変換や音声の作成に役立つつよいやつです。（詳しくは論文を読んで。）
 </p>
 <p>
-The network models the conditional probability to generate the next
-sample in the audio waveform, given all previous samples and possibly
-additional parameters.
+Networkは、それまでの音声サンプルとモデルに関するパラメータから、次の音波サンプルを条件付確率の形（多分）で生成します。
 </p>
 <p>
-After an audio preprocessing step, the input waveform is quantized to a fixed integer range.
-The integer amplitudes are then one-hot encoded to produce a tensor of shape <code>(num_samples, num_channels)</code>.
+音声の前処理が済んだら、インプットされた波形は整数の範囲で数値化されます。
+その整数化された（音の？）振幅は、それからone-hot形式（1つだけHigh(1)であり、他はLow(0)であるようなビット列）でエンコードされ、<code>(num_samples, num_channels)</code>で表されるtensorを生成します。
 </p>
 <p>
 A convolutional layer that only accesses the current and previous inputs then reduces the channel dimension.
