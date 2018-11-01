@@ -36,9 +36,9 @@ The loss function is the cross-entropy between the output for each timestep and 
 このリポジトリでは、 ネットワークの実装は<a href="./wavenet/model.py">model.py</a>で書かれています。
 (model.pyはwavenetフォルダ内にある)
 </p>
-<p>
-  追記:この辺の関数については https://qiita.com/shunchan0677/items/d30e5206677f2068a468 あたりに書いてあるかもしれんと思った
-</p>
+
+  >追記:この辺の関数については https://qiita.com/shunchan0677/items/d30e5206677f2068a468, https://qiita.com/MasaEguchi/items/cd5f7e9735a120f27e2a あたりに書いてあるかもしれんと思った
+
 </td>
 <td width="300">
 <img src="images/network.png" width="300"></img>
@@ -63,6 +63,20 @@ GPUサポートが必要であれば、
 pip install -r requirements_gpu.txt
 ```
 を使ってください。
+
+
+>Anacondaを使う場合
+```bash
+$ conda list
+```
+>で既にインストールされてるパッケージを確認(指定したパッケージがあるか確認する方法しゃっちょが教えてくれた気がするけどわすれた)
+
+>tensorflowないのでインストール
+```bash
+$ conda install tensorflow
+```
+>そしたらなんかいろんなパッケージをアップデートやらダウンロードやらするとか言い出したので任せる（すごい時間かかる）
+
 
 ## ネットワークの学習(Training the network)
 
