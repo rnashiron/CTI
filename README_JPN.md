@@ -65,18 +65,8 @@ pip install -r requirements_gpu.txt
 を使ってください。
 
 
->Anacondaを使う場合
-```bash
-$ conda list
-```
->で既にインストールされてるパッケージを確認(指定したパッケージがあるか確認する方法しゃっちょが教えてくれた気がするけどわすれた)
-
->tensorflowないのでインストール
-```bash
-$ conda install tensorflow
-```
->そしたらなんかいろんなパッケージをアップデートやらダウンロードやらするとか言い出したので任せる（すごい時間かかる）
-
+>Python 3.7では動かないので3.6にすること
+>https://www.sejuku.net/blog/43784
 
 ## ネットワークの学習(Training the network)
 
