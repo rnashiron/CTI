@@ -47,11 +47,24 @@ The loss function is the cross-entropy between the output for each timestep and 
 </table>
 
 ## 必要なやつ
+>Python 3.7では動かないので3.6にすること
+>https://www.sejuku.net/blog/43784
 
 training scriptを回す前に、まずTensorflowをインストールしておいてください。
 コードはTensorFlow ver. 1.0.1(Python 2.7, 3.5)でテストしています。
 
+>以下を実行
+```(bash)
+$ python -m pip install --upgrade pip
+$ pip install --upgrade tensorflow
+```
+
 加えて、音声データの読み書きを可能にするために [librosa](https://github.com/librosa/librosa) をインストールする必要があります。
+
+>以下を実行
+```(bash)
+$ conda install -c conda-forge librosa
+```
 
 必要なパッケージをインストールするために、
 ```bash
@@ -65,8 +78,7 @@ pip install -r requirements_gpu.txt
 を使ってください。
 
 
->Python 3.7では動かないので3.6にすること
->https://www.sejuku.net/blog/43784
+
 
 ## ネットワークの学習(Training the network)
 
